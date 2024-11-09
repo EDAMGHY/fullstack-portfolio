@@ -1,8 +1,8 @@
-import { IProjectItem } from "@/types";
-import React from "react";
-import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
-import TechnologiesList from "./TechnoligiesList";
+import Link from "next/link";
+
+import { IProjectItem } from "@/types";
+import TechnologiesList from "../TechnologiesList";
 
 export const ProjectItem = ({
   description,

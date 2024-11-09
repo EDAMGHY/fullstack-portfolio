@@ -1,15 +1,15 @@
-import { ModeToggle } from "./ui/mode-toggle";
+import { ModeToggle } from "../ui/mode-toggle";
 import { cn } from "@/lib/utils";
 import { ISidebar } from "@/types";
 import { FaArrowRight } from "react-icons/fa6";
 import Link from "next/link";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 
 export const Header = ({ className }: ISidebar) => {
   return (
     <header className={cn("mt-10 md:mt-20 mb-5", className)}>
       <ModeToggle variant="button" />
-      <h1 className="heading-name mt-5">
+      <h1 className="heading-name mt-5 wrap">
         DAMRI <br /> ABDELLAH
       </h1>
       <div className="space-y-4">

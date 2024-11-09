@@ -129,4 +129,16 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+  .wrap {
+    paint-order: stroke fill;
+    display: inline-block;
+    letter-spacing: 4px !important;
+    text-shadow: 3px 3px 0 theme("colors.blue.500"),
+      5px 5px 0 rgba(0, 0, 0, 0.8);
+  }
+
+  .dark .wrap {
+    text-shadow: 3px 3px 0 theme("colors.blue.500"),
+      5px 5px 0 rgba(255, 255, 255, 0.8);
+  }
 }

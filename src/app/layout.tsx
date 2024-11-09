@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
-import "./globals.css";
 import { Eczar, Open_Sans } from "next/font/google";
+
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { BackgroundPattern } from "@/components/BackgroundPattern";
+
+import "./globals.css";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const eczar = Eczar({
   weight: ["400", "500", "600", "800", "700"],
@@ -33,15 +36,17 @@ export default function RootLayout({
       <body
         className={`${eczar.variable} ${openSans.variable} font-sans antialiased`}
       >
-        <BackgroundPattern />
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-        </ThemeProvider>
+        <TooltipProvider>
+          <BackgroundPattern />
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+          </ThemeProvider>
+        </TooltipProvider>
       </body>
     </html>
   );

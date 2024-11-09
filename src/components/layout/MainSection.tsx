@@ -1,8 +1,8 @@
 import { experiences, projects } from "@/lib/data";
-import { ExperienceItem } from "./ExperienceItem";
+import { ExperienceItem } from "@/components/experiences";
+import { ProjectItem } from "@/components/projects";
 import { IExperienceItem, IProjectItem } from "@/types";
-import { ProjectItem } from "./ProjectItem";
-import { Section } from "./Section";
+import { Section } from "../Section";
 
 export const MainSection = () => {
   return (

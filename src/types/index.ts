@@ -33,3 +33,11 @@ export interface ITechnologiesList<T> {
 export interface IModeToggle {
   variant?: "default" | "button";
 }
+
+export interface IDashboardSection {
+  children: ReactNode;
+  className?: string;
+  title: string;
+  description: string;
+  url: string;
+}

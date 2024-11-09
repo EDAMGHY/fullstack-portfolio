@@ -1,8 +1,9 @@
-import { MainSection } from "@/components/MainSection";
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
+import { MainSection, Footer, Header } from "@/components/layout";
+// import { getAllUsers } from "@/actions";
 
-export default function Home() {
+export default async function Home() {
+  // const users = await getAllUsers();
+  // console.log("users", users);
   return (
     <main className="container">
       <Header />

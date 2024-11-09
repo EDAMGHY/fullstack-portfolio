@@ -1,8 +1,9 @@
+import { ArrowUpRight } from "lucide-react";
+import Link from "next/link";
+
 import { formatDate } from "@/lib/utils";
 import { IExperienceItem } from "@/types";
-import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
-import TechnologiesList from "./TechnoligiesList";
+import TechnologiesList from "../TechnologiesList";
 
 export const ExperienceItem = ({
   employer,
