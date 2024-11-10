@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
+import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -16,19 +16,72 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { aboutMeFormSchema } from "./schemas";
+import { createAboutMe, updateAboutMe } from "@/actions";
+import { useSession } from "next-auth/react";
+import { AboutMe } from "@prisma/client";
 
-export function AboutMeForm() {
+export function AboutMeForm({ aboutMe }: { aboutMe: AboutMe }) {
+  const { data: session } = useSession();
+  const { toast } = useToast();
+
   const form = useForm<z.infer<typeof aboutMeFormSchema>>({
     resolver: zodResolver(aboutMeFormSchema),
     defaultValues: {
-      fullName: undefined,
-      description: undefined,
-      bio: undefined,
+      fullName: aboutMe?.fullName || "",
+      description: aboutMe?.description || "",
+      bio: aboutMe?.bio || "",
     },
   });
 
-  function onSubmit(values: z.infer<typeof aboutMeFormSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof aboutMeFormSchema>) {
+    if (!session?.user?.id) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "User not authenticated",
+      });
+      return;
+    }
+    try {
+      if (aboutMe?.id) {
+        await updateAboutMe({
+          id: aboutMe.id,
+          fullName: values.fullName,
+          description: values.description,
+          bio: values.bio,
+          authorId: session?.user?.id,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        });
+      } else {
+        await createAboutMe({
+          fullName: values.fullName,
+          description: values.description,
+          bio: values.bio,
+          authorId: session?.user?.id,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        });
+      }
+
+      toast({
+        variant: "success",
+        title: aboutMe?.id
+          ? "About Me Updated Successfully"
+          : "About Me Created Successfully",
+        description: aboutMe?.id
+          ? "About Me Updated Successfully"
+          : "About Me Created Successfully",
+      });
+      if (!aboutMe?.id) form.reset();
+    } catch (err) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description:
+          err instanceof Error ? err.message : "Something went wrong",
+      });
+    }
   }
 
   return (
@@ -68,13 +121,13 @@ export function AboutMeForm() {
             <FormItem>
               <FormLabel>Bio</FormLabel>
               <FormControl>
-                <Textarea placeholder="Enter Bio..." {...field} />
+                <Textarea rows={10} placeholder="Enter Bio..." {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <Button type="submit">{aboutMe?.id ? "Update" : "Submit"}</Button>
       </form>
     </Form>
   );

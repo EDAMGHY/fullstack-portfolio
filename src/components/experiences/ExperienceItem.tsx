@@ -17,7 +17,7 @@ export const ExperienceItem = ({
   if (link) {
   }
   return (
-    <Link href={link || "#."}>
+    <Link target="_blank" href={link || "#."}>
       <div className="space-y-2 group">
         <div className="flex justify-between w-full gap-4">
           <h2 className="group-hover:text-blue-400 text-lg duration-300 transition-all inline-flex gap-2 font-bold">
@@ -27,12 +27,10 @@ export const ExperienceItem = ({
               size={16}
             />
           </h2>{" "}
-          {startDate && endDate && (
-            <p className="text-sm text-neutral-500">
-              {formatDate(startDate)} -{" "}
-              {isPresent ? "Present" : formatDate(endDate)}
-            </p>
-          )}
+          <p className="text-sm text-neutral-500">
+            {formatDate(startDate)} -{" "}
+            {isPresent ? "Present" : formatDate(endDate!)}
+          </p>
         </div>
         {employer && (
           <div className="flex justify-between w-full gap-4">

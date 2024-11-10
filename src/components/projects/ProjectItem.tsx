@@ -11,7 +11,7 @@ export const ProjectItem = ({
   technologies,
 }: IProjectItem) => {
   return (
-    <Link href={link || "#."}>
+    <Link target="_blank" href={link || "#."}>
       <div className="group space-y-2">
         {name && (
           <h5 className="heading-5 !font-semibold group-hover:text-blue-400 text-lg duration-300 transition-all inline-flex gap-2">

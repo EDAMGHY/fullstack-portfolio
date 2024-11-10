@@ -1,7 +1,6 @@
 import { cn } from "@/lib/utils";
 import { ISection } from "@/types";
 import slugify from "lodash.kebabcase";
-import React from "react";
 
 export const Section = ({
   title,

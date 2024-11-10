@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -19,15 +20,21 @@ import { Textarea } from "@/components/ui/textarea";
 import { experiencesFormSchema } from "./schemas";
 import { DatePicker } from "@/components/ui/date-picker";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useToast } from "@/hooks/use-toast";
+import { useSession } from "next-auth/react";
+import { createExperience } from "@/actions";
 
 export function ExperiencesForm() {
+  const { data: session } = useSession();
+  const { toast } = useToast();
+
   const form = useForm<z.infer<typeof experiencesFormSchema>>({
     resolver: zodResolver(experiencesFormSchema),
     defaultValues: {
-      occupation: undefined,
-      employer: undefined,
-      url: undefined,
-      stack: undefined,
+      occupation: "",
+      employer: "",
+      url: "",
+      stack: "",
       startDate: undefined,
       endDate: null,
       isPresent: false,
@@ -36,8 +43,44 @@ export function ExperiencesForm() {
 
   const { watch } = form;
 
-  function onSubmit(values: z.infer<typeof experiencesFormSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof experiencesFormSchema>) {
+    if (!session?.user?.id) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "User not authenticated",
+      });
+      return;
+    }
+
+    try {
+      await createExperience({
+        employer: values.employer,
+        occupation: values.occupation,
+        url: values.url,
+        stack: values.stack,
+        startDate: values.startDate,
+        endDate: values.endDate,
+        isPresent: values.isPresent,
+        authorId: session?.user?.id,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+
+      toast({
+        variant: "default",
+        title: "Experience Created Successfully",
+        description: "Experience Created Successfully",
+      });
+      form.reset();
+    } catch (err) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description:
+          err instanceof Error ? err.message : "Something went wrong",
+      });
+    }
   }
 
   const isPresent = watch("isPresent");
@@ -147,8 +190,11 @@ export function ExperiencesForm() {
             <FormItem>
               <FormLabel>Stack</FormLabel>
               <FormControl>
-                <Textarea placeholder="Enter Stack..." {...field} />
+                <Textarea rows={10} placeholder="Enter Stack..." {...field} />
               </FormControl>
+              <FormDescription>
+                Each stack should be seperated by a comma.
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}

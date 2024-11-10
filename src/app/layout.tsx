@@ -6,6 +6,8 @@ import { BackgroundPattern } from "@/components/BackgroundPattern";
 
 import "./globals.css";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { SessionProvider } from "@/components/SessionProvider";
+import { Toaster } from "@/components/ui/toaster";
 
 const eczar = Eczar({
   weight: ["400", "500", "600", "800", "700"],
@@ -38,14 +40,17 @@ export default function RootLayout({
       >
         <TooltipProvider>
           <BackgroundPattern />
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            {children}
-          </ThemeProvider>
+          <Toaster />
+          <SessionProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              {children}
+            </ThemeProvider>
+          </SessionProvider>
         </TooltipProvider>
       </body>
     </html>

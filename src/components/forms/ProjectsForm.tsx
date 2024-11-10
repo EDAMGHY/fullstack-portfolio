@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -16,20 +17,59 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { projectsFormSchema } from "./schemas";
+import { useSession } from "next-auth/react";
+import { useToast } from "@/hooks/use-toast";
+import { createProject } from "@/actions";
 
 export function ProjectsForm() {
+  const { data: session } = useSession();
+  const { toast } = useToast();
+
   const form = useForm<z.infer<typeof projectsFormSchema>>({
     resolver: zodResolver(projectsFormSchema),
     defaultValues: {
-      name: undefined,
-      url: undefined,
-      description: undefined,
-      stack: undefined,
+      name: "",
+      url: "",
+      description: "",
+      stack: "",
     },
   });
 
-  function onSubmit(values: z.infer<typeof projectsFormSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof projectsFormSchema>) {
+    if (!session?.user?.id) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "User not authenticated",
+      });
+      return;
+    }
+
+    try {
+      await createProject({
+        name: values.name,
+        description: values.description,
+        url: values.url,
+        stack: values.stack,
+        authorId: session?.user?.id,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+
+      toast({
+        variant: "default",
+        title: "Project Created Successfully",
+        description: "Project Created Successfully",
+      });
+      form.reset();
+    } catch (err) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description:
+          err instanceof Error ? err.message : "Something went wrong",
+      });
+    }
   }
 
   return (
@@ -81,8 +121,11 @@ export function ProjectsForm() {
             <FormItem>
               <FormLabel>Stack</FormLabel>
               <FormControl>
-                <Textarea placeholder="Enter Stack..." {...field} />
+                <Textarea rows={10} placeholder="Enter Stack..." {...field} />
               </FormControl>
+              <FormDescription>
+                Each stack should be seperated by a comma.
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}

@@ -14,24 +14,28 @@ export const Footer = () => {
       </p>
       <div className="flex justify-center items-center gap-5">
         <Link
+          target="_blank"
           className="hover:text-blue-400 duration-300 transition-all"
-          href="/"
+          href="https://github.com/edamghy"
         >
           <FaGithub size={24} />
         </Link>
         <Link
+          target="_blank"
           className="hover:text-blue-400 duration-300 transition-all"
-          href="/"
+          href="https://linkedin.com/in/abdellah-damri/"
         >
           <FaLinkedin size={24} />
         </Link>
         <Link
+          target="_blank"
           className="hover:text-blue-400 duration-300 transition-all"
-          href="/"
+          href="https://x.com/damriabdellah"
         >
           <FaXTwitter size={24} />
         </Link>
         <Link
+          target="_blank"
           className="hover:text-blue-400 duration-300 transition-all"
           href="mailto:damriabdellah@gmail.com"
         >
