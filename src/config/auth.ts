@@ -13,7 +13,6 @@ export const handler = NextAuth({
   ],
   pages: {
     signIn: "/login",
-    error: "/error",
   },
   callbacks: {
     async session({ session, token, user }) {

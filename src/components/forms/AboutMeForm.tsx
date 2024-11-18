@@ -18,7 +18,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { aboutMeFormSchema } from "./schemas";
 import { createAboutMe, updateAboutMe } from "@/actions";
 import { useSession } from "next-auth/react";
-import { AboutMe } from "@prisma/client";
+import type { AboutMe } from "@prisma/client";
 
 export function AboutMeForm({ aboutMe }: { aboutMe: AboutMe }) {
   const { data: session } = useSession();

@@ -1,7 +1,7 @@
 "use server";
 
 import { prisma } from "@/config";
-import { Experience } from "@prisma/client";
+import type { Experience } from "@prisma/client";
 
 /**
  * Create a new Experience record

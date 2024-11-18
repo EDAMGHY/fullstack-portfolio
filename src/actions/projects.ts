@@ -1,7 +1,7 @@
 "use server";
 
 import { prisma } from "@/config";
-import { Project } from "@prisma/client";
+import type { Project } from "@prisma/client";
 
 /**
  * Create a new Project record

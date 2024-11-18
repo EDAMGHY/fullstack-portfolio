@@ -1,7 +1,7 @@
 "use server";
 
 import { prisma } from "@/config";
-import { AboutMe } from "@prisma/client";
+import type { AboutMe } from "@prisma/client";
 
 /**
  * Create a new AboutMe record
@@ -14,14 +14,19 @@ export async function createAboutMe({
   bio,
   authorId,
 }: Omit<AboutMe, "id">) {
-  return await prisma.aboutMe.create({
-    data: {
-      fullName,
-      description,
-      bio,
-      authorId,
-    },
-  });
+  try {
+    return await prisma.aboutMe.create({
+      data: {
+        fullName,
+        description,
+        bio,
+        authorId,
+      },
+    });
+  } catch (error) {
+    console.log("Error creating AboutMe record");
+    console.error(error);
+  }
 }
 
 /**
@@ -36,15 +41,20 @@ export async function updateAboutMe({
   authorId,
   id,
 }: AboutMe) {
-  return await prisma.aboutMe.update({
-    where: { id },
-    data: {
-      fullName,
-      description,
-      bio,
-      authorId,
-    },
-  });
+  try {
+    return await prisma.aboutMe.update({
+      where: { id },
+      data: {
+        fullName,
+        description,
+        bio,
+        authorId,
+      },
+    });
+  } catch (error) {
+    console.log("Error updating AboutMe record");
+    console.error(error);
+  }
 }
 
 /**

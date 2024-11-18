@@ -1,4 +1,4 @@
-import { Experience, Project } from "@prisma/client";
+import type { Experience, Project } from "@prisma/client";
 import { ElementType, ReactNode } from "react";
 
 export interface ISidebar {
