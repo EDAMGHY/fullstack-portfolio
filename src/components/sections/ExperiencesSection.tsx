@@ -5,7 +5,7 @@ import { getExperiences } from "@/actions";
 
 export const ExperiencesSection = async () => {
   const data = await getExperiences();
-  const experiences = getSectionExperiences(data);
+  const experiences = getSectionExperiences(data!);
 
   return (
     <Section title="Experience">

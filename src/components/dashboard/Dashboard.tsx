@@ -31,13 +31,13 @@ export const DashboardComponent = async () => {
           title="Total Projects"
           description="The total number of projects"
           Icon={FolderKanban}
-          value={projectsCount}
+          value={projectsCount!}
         />
         <AnalyticsCard
           title="Total Experiences"
           description="The total number of experiences"
           Icon={Luggage}
-          value={experiencesCount}
+          value={experiencesCount!}
         />
       </div>
       <div className="grid gap-4 md:gap-8 grid-cols-1 xl:grid-cols-2">

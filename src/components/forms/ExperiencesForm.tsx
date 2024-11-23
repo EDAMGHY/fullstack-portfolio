@@ -68,7 +68,7 @@ export function ExperiencesForm() {
       });
 
       toast({
-        variant: "default",
+        variant: "success",
         title: "Experience Created Successfully",
         description: "Experience Created Successfully",
       });

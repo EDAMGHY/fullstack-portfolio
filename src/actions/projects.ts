@@ -1,7 +1,14 @@
 "use server";
 
-import { prisma } from "@/config";
+import {
+  createProjectItem,
+  deleteProjectItem,
+  getLastProjectsItems,
+  getProjectsCountItem,
+  getProjectsItems,
+} from "@/queries";
 import type { Project } from "@prisma/client";
+import { revalidatePath } from "next/cache";
 
 /**
  * Create a new Project record
@@ -15,15 +22,22 @@ export async function createProject({
   url,
   stack,
 }: Omit<Project, "id">) {
-  return await prisma.project.create({
-    data: {
+  try {
+    const project = await createProjectItem({
       description,
       name,
       url,
       stack,
       authorId,
-    },
-  });
+    });
+
+    return project;
+  } catch (error) {
+    console.log("Error creating Project record");
+    console.error(error);
+  }
+  revalidatePath("/");
+  revalidatePath("/dashboard/projects");
 }
 
 /**
@@ -31,24 +45,27 @@ export async function createProject({
  * @returns {Promise<Project[]>} An array of Project objects
  */
 export async function getProjects() {
-  return await prisma.project.findMany({
-    orderBy: {
-      createdAt: "asc",
-    },
-  });
+  try {
+    const projects = await getProjectsItems("asc");
+    return projects;
+  } catch (error) {
+    console.log("Error getting Projects");
+    console.error(error);
+  }
 }
 
 /**
- * Get the last 5 Projects
+ * Get the last {limit} Projects
  * @returns {Promise<Project[]>} An array of Project objects
  */
 export async function getLastProjects(limit: number = 3) {
-  return await prisma.project.findMany({
-    orderBy: {
-      createdAt: "asc",
-    },
-    take: limit,
-  });
+  try {
+    const projects = await getLastProjectsItems("asc", limit);
+    return projects;
+  } catch (error) {
+    console.log("Error getting Projects");
+    console.error(error);
+  }
 }
 
 /**
@@ -56,7 +73,13 @@ export async function getLastProjects(limit: number = 3) {
  * @returns {Promise<number>} The count of Projects
  */
 export async function getProjectsCount() {
-  return await prisma.project.count();
+  try {
+    const count = await getProjectsCountItem();
+    return count;
+  } catch (error) {
+    console.log("Error getting Projects count");
+    console.error(error);
+  }
 }
 
 /**
@@ -65,9 +88,13 @@ export async function getProjectsCount() {
  * @returns {Promise<Project>} The deleted Project object
  */
 export async function deleteProject(id: string) {
-  return await prisma.project.delete({
-    where: {
-      id,
-    },
-  });
+  try {
+    const deleted = await deleteProjectItem(id);
+    return deleted;
+  } catch (error) {
+    console.log("Error deleting Project record");
+    console.error(error);
+  }
+  revalidatePath("/");
+  revalidatePath("/dashboard/projects");
 }

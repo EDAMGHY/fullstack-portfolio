@@ -1,7 +1,12 @@
 "use server";
 
-import { prisma } from "@/config";
+import {
+  createAboutMeItem,
+  findAboutMeItem,
+  updateAboutMeItem,
+} from "@/queries";
 import type { AboutMe } from "@prisma/client";
+import { revalidatePath } from "next/cache";
 
 /**
  * Create a new AboutMe record
@@ -15,18 +20,19 @@ export async function createAboutMe({
   authorId,
 }: Omit<AboutMe, "id">) {
   try {
-    return await prisma.aboutMe.create({
-      data: {
-        fullName,
-        description,
-        bio,
-        authorId,
-      },
+    const createdAboutMe = await createAboutMeItem({
+      fullName,
+      description,
+      bio,
+      authorId,
     });
+    return createdAboutMe;
   } catch (error) {
     console.log("Error creating AboutMe record");
     console.error(error);
   }
+  revalidatePath("/");
+  revalidatePath("/dashboard/about");
 }
 
 /**
@@ -42,19 +48,20 @@ export async function updateAboutMe({
   id,
 }: AboutMe) {
   try {
-    return await prisma.aboutMe.update({
-      where: { id },
-      data: {
-        fullName,
-        description,
-        bio,
-        authorId,
-      },
+    const updatedAboutMe = await updateAboutMeItem({
+      id,
+      fullName,
+      description,
+      bio,
+      authorId,
     });
+    return updatedAboutMe;
   } catch (error) {
     console.log("Error updating AboutMe record");
     console.error(error);
   }
+  revalidatePath("/");
+  revalidatePath("/dashboard/about");
 }
 
 /**
@@ -62,5 +69,13 @@ export async function updateAboutMe({
  * @returns {Promise<AboutMe | null>} The found AboutMe record or null if not found
  */
 export async function findAboutMe() {
-  return await prisma.aboutMe.findFirst();
+  try {
+    const aboutMe = await findAboutMeItem();
+    return aboutMe;
+  } catch (error) {
+    console.log("Error finding AboutMe record");
+    console.error(error);
+    revalidatePath("/");
+    revalidatePath("/dashboard/about");
+  }
 }

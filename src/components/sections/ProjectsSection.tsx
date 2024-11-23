@@ -5,7 +5,7 @@ import { getSectionProjects } from "@/lib/utils";
 
 export const ProjectsSection = async () => {
   const data = await getProjects();
-  const projects = getSectionProjects(data);
+  const projects = getSectionProjects(data!);
 
   return (
     <Section title="Projects">

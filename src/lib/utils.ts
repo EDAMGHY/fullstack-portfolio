@@ -26,6 +26,8 @@ export const getStacks = (stack: string) => {
 export const getNormalizedExperiences = (
   array: Experience[] = []
 ): ExperiencesData[] => {
+  if (!Array.isArray(array)) return [];
+
   return array.map((item) => ({
     ...item,
     stacks: getStacks(item.stack),
@@ -34,6 +36,7 @@ export const getNormalizedExperiences = (
 export const getNormalizedProjects = (
   array: Project[] = []
 ): ProjectsData[] => {
+  if (!Array.isArray(array)) return [];
   return array.map((item) => ({
     ...item,
     technologies: getStacks(item.stack),
@@ -41,6 +44,8 @@ export const getNormalizedProjects = (
 };
 
 export const getSectionProjects = (data: Project[]) => {
+  if (!Array.isArray(data)) return [];
+
   return data?.map((project) => ({
     id: project?.id,
     description: project?.description,
@@ -50,6 +55,8 @@ export const getSectionProjects = (data: Project[]) => {
   }));
 };
 export const getSectionExperiences = (data: Experience[]) => {
+  if (!Array.isArray(data)) return [];
+
   return data?.map((experience) => ({
     id: experience?.id,
     employer: experience?.employer,

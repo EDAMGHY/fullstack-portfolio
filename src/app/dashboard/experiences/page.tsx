@@ -6,6 +6,7 @@ import { getNormalizedExperiences } from "@/lib/utils";
 
 const ExperiencesPage = async () => {
   const data = await getExperiences();
+
   const experiences = getNormalizedExperiences(data);
 
   return (

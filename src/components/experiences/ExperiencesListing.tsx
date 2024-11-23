@@ -12,6 +12,7 @@ import { ExperiencesData } from "@/types";
 import { formatDate } from "@/lib/utils";
 import { deleteExperience } from "@/actions";
 import { DeleteItem } from "../DeleteItem";
+import { EmptyBlock } from "../EmptyBlock";
 export const ExperiencesListing = ({
   data = [],
 }: {
@@ -31,38 +32,47 @@ export const ExperiencesListing = ({
             <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody>
-          {data?.map((exp) => (
-            <TableRow key={exp?.id}>
-              <TableCell className="text-nowrap">
-                <div className="font-medium">{exp.employer}</div>
-              </TableCell>
-              <TableCell className="text-nowrap">{exp.occupation}</TableCell>
-              <TableCell className="text-nowrap">
-                {formatDate(exp.startDate)?.toString()}
-              </TableCell>
-              <TableCell className="text-nowrap">
-                {exp.endDate ? formatDate(exp.endDate)?.toString() : "Present"}
-              </TableCell>
-              <TableCell>
-                <div className="flex flex-wrap gap-2">
-                  {exp.stacks.map((stack) => (
-                    <Badge key={stack}>{stack}</Badge>
-                  ))}
-                </div>
-              </TableCell>
-              <TableCell>
-                <Link className="underline" href={exp.url}>
-                  {exp.url}
-                </Link>
-              </TableCell>
-              <TableCell>
-                <DeleteItem id={exp.id} onDelete={deleteExperience} />
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
+        {data?.length > 0 && (
+          <TableBody>
+            {data?.map((exp) => (
+              <TableRow key={exp?.id}>
+                <TableCell className="text-nowrap">
+                  <div className="font-medium">{exp.employer}</div>
+                </TableCell>
+                <TableCell className="text-nowrap">{exp.occupation}</TableCell>
+                <TableCell className="text-nowrap">
+                  {formatDate(exp.startDate)?.toString()}
+                </TableCell>
+                <TableCell className="text-nowrap">
+                  {exp.endDate
+                    ? formatDate(exp.endDate)?.toString()
+                    : "Present"}
+                </TableCell>
+                <TableCell>
+                  <div className="flex flex-wrap gap-2">
+                    {exp.stacks.map((stack) => (
+                      <Badge key={stack}>{stack}</Badge>
+                    ))}
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <Link className="underline" href={exp.url}>
+                    {exp.url}
+                  </Link>
+                </TableCell>
+                <TableCell>
+                  <DeleteItem id={exp.id} onDelete={deleteExperience} />
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        )}
       </Table>
+
+      <EmptyBlock<ExperiencesData>
+        data={data}
+        message="No Experiences to show..."
+      />
     </div>
   );
 };

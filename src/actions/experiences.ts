@@ -1,7 +1,14 @@
 "use server";
 
-import { prisma } from "@/config";
+import {
+  createExperienceItem,
+  deleteExperienceItem,
+  getExperiencesCountItem,
+  getExperiencesItems,
+  getLastExperiencesItems,
+} from "@/queries";
 import type { Experience } from "@prisma/client";
+import { revalidatePath } from "next/cache";
 
 /**
  * Create a new Experience record
@@ -18,8 +25,8 @@ export async function createExperience({
   url,
   endDate,
 }: Omit<Experience, "id">) {
-  return await prisma.experience.create({
-    data: {
+  try {
+    const createdExperience = await createExperienceItem({
       employer,
       occupation,
       startDate,
@@ -28,20 +35,29 @@ export async function createExperience({
       url,
       endDate,
       authorId,
-    },
-  });
+    });
+
+    return createdExperience;
+  } catch (error) {
+    console.log("Error creating Experience record");
+    console.error(error);
+  }
+  revalidatePath("/");
+  revalidatePath("/dashboard/experiences");
 }
 
 /**
  * Get all Experiences
  * @returns {Promise<Experience[]>} An array of Experience objects
  */
-export async function getExperiences() {
-  return await prisma.experience.findMany({
-    orderBy: {
-      createdAt: "asc",
-    },
-  });
+export async function getExperiences(): Promise<Experience[] | undefined> {
+  try {
+    const experiences = await getExperiencesItems("asc");
+    return experiences;
+  } catch (error) {
+    console.log("Error getting Experiences");
+    console.error(error);
+  }
 }
 
 /**
@@ -49,12 +65,13 @@ export async function getExperiences() {
  * @returns {Promise<Experience[]>} An array of Experience objects
  */
 export async function getLastExperiences(limit: number = 3) {
-  return await prisma.experience.findMany({
-    orderBy: {
-      createdAt: "asc",
-    },
-    take: limit,
-  });
+  try {
+    const experiences = await getLastExperiencesItems("asc", limit);
+    return experiences;
+  } catch (error) {
+    console.log("Error getting Experiences");
+    console.error(error);
+  }
 }
 
 /**
@@ -62,7 +79,13 @@ export async function getLastExperiences(limit: number = 3) {
  * @returns {Promise<number>} The count of Experiences
  */
 export async function getExperiencesCount() {
-  return await prisma.experience.count();
+  try {
+    const count = await getExperiencesCountItem();
+    return count;
+  } catch (error) {
+    console.log("Error getting Experiences count");
+    console.error(error);
+  }
 }
 
 /**
@@ -71,9 +94,13 @@ export async function getExperiencesCount() {
  * @returns {Promise<Experience>} The deleted Experience object
  */
 export async function deleteExperience(id: string) {
-  return await prisma.experience.delete({
-    where: {
-      id,
-    },
-  });
+  try {
+    const deleted = await deleteExperienceItem(id);
+    return deleted;
+  } catch (error) {
+    console.log("Error deleting Experience");
+    console.error(error);
+  }
+  revalidatePath("/");
+  revalidatePath("/dashboard/experiences");
 }

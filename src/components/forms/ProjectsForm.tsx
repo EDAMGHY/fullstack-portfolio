@@ -57,7 +57,7 @@ export function ProjectsForm() {
       });
 
       toast({
-        variant: "default",
+        variant: "success",
         title: "Project Created Successfully",
         description: "Project Created Successfully",
       });
