@@ -22,13 +22,15 @@ export const createAboutMeItem = async (
  */
 export const updateAboutMeItem = async (
   args: Omit<AboutMe, "createdAt" | "updatedAt">
-): Promise<AboutMe> =>
-  await prisma.aboutMe.update({
-    where: { id: args?.id },
+): Promise<AboutMe> => {
+  const { id, ...rest } = args;
+  return await prisma.aboutMe.update({
+    where: { id },
     data: {
-      ...args,
+      ...rest,
     },
   });
+};
 
 /**
  *
