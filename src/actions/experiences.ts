@@ -25,8 +25,9 @@ export async function createExperience({
   url,
   endDate,
 }: Omit<Experience, "id">) {
+  let createdExperience = null;
   try {
-    const createdExperience = await createExperienceItem({
+    createdExperience = await createExperienceItem({
       employer,
       occupation,
       startDate,
@@ -36,14 +37,13 @@ export async function createExperience({
       endDate,
       authorId,
     });
-
-    return createdExperience;
   } catch (error) {
     console.log("Error creating Experience record");
     console.error(error);
   }
   revalidatePath("/");
   revalidatePath("/dashboard/experiences");
+  return createdExperience;
 }
 
 /**
@@ -94,13 +94,14 @@ export async function getExperiencesCount() {
  * @returns {Promise<Experience>} The deleted Experience object
  */
 export async function deleteExperience(id: string) {
+  let deleted = null;
   try {
-    const deleted = await deleteExperienceItem(id);
-    return deleted;
+    deleted = await deleteExperienceItem(id);
   } catch (error) {
     console.log("Error deleting Experience");
     console.error(error);
   }
   revalidatePath("/");
   revalidatePath("/dashboard/experiences");
+  return deleted;
 }

@@ -22,22 +22,22 @@ export async function createProject({
   url,
   stack,
 }: Omit<Project, "id">) {
+  let project = null;
   try {
-    const project = await createProjectItem({
+    project = await createProjectItem({
       description,
       name,
       url,
       stack,
       authorId,
     });
-
-    return project;
   } catch (error) {
     console.log("Error creating Project record");
     console.error(error);
   }
   revalidatePath("/");
   revalidatePath("/dashboard/projects");
+  return project;
 }
 
 /**
@@ -88,13 +88,14 @@ export async function getProjectsCount() {
  * @returns {Promise<Project>} The deleted Project object
  */
 export async function deleteProject(id: string) {
+  let deleted = null;
   try {
-    const deleted = await deleteProjectItem(id);
-    return deleted;
+    deleted = await deleteProjectItem(id);
   } catch (error) {
     console.log("Error deleting Project record");
     console.error(error);
   }
   revalidatePath("/");
   revalidatePath("/dashboard/projects");
+  return deleted;
 }
