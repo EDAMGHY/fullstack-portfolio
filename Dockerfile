@@ -2,7 +2,7 @@ FROM node:20-alpine AS builder
 WORKDIR /app
 
 # Install missing dependencies
-RUN apk add --no-cache libgcc libstdc++ openssl1.1-compat
+RUN apk add --no-cache libgcc libstdc++ openssl
 
 # Install dependencies
 COPY package.json yarn.lock ./
