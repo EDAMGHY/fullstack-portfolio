@@ -1,7 +1,7 @@
 FROM node:20-alpine AS builder
 WORKDIR /app
 
-# Install missing dependencies
+# Install dependencies including OpenSSL
 RUN apk add --no-cache libgcc libstdc++ openssl
 
 # Install dependencies
@@ -22,6 +22,9 @@ RUN yarn build
 # Production stage
 FROM node:20-alpine AS runner
 WORKDIR /app
+
+# Install OpenSSL in the runner stage
+RUN apk add --no-cache openssl
 
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
